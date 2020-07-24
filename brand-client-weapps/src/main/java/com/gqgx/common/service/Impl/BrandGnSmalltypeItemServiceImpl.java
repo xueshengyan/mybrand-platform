@@ -19,14 +19,13 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Administrator on 2020/7/24.
+ * Created by Hunter on 2020-07-23.
  */
 @Service
-public class BrandGnSmalltypeItemServiceImpl implements BrandGnSmalltypeItemService{
+public class BrandGnSmalltypeItemServiceImpl implements BrandGnSmalltypeItemService {
 
     @Autowired
     protected BrandGnSmalltypeItemMapper mapper;
-
 
     @Override
     public BrandGnSmalltypeItem getBrandGnSmalltypeItem(Long id) {
@@ -35,14 +34,13 @@ public class BrandGnSmalltypeItemServiceImpl implements BrandGnSmalltypeItemServ
 
     @Override
     public int saveBrandGnSmalltypeItem(BrandGnSmalltypeItem brandGnSmalltypeItem) {
-        int count = 0 ;
-        if(Objects.isEmpty(brandGnSmalltypeItem.getId())){
+        int count = 0;
+        if(!Objects.isEmpty(brandGnSmalltypeItem.getId())){
             count = mapper.updateByPrimaryKeySelective(brandGnSmalltypeItem);
-        }else {
-            //设置默认值
-            brandGnSmalltypeItem.setCreateDate(new Date());
-            brandGnSmalltypeItem.setUpdateCount(0);
+        }else{
             brandGnSmalltypeItem.setRecordStatus(RecordStatus.ACTIVE);
+            brandGnSmalltypeItem.setUpdateCount(0);
+            brandGnSmalltypeItem.setCreateDate(new Date());
             count = mapper.insertSelective(brandGnSmalltypeItem);
         }
         return count;
@@ -55,15 +53,14 @@ public class BrandGnSmalltypeItemServiceImpl implements BrandGnSmalltypeItemServ
 
     @Override
     public int deleteBrandGnSmalltypeItemByIds(Long[] ids) {
-        Example example =new Example(BrandSmallType.class);
+        Example example = new Example(BrandSmallType.class);
         Example.Criteria cb = example.createCriteria();
-        cb.andIn("id", Arrays.asList(ids)) ;
+        cb.andIn("id", Arrays.asList(ids));
         return mapper.deleteByExample(example);
     }
 
     @Override
     public PagingResult<BrandGnSmalltypeItem> findBrandGnSmalltypeItem(BrandGnSmalltypeItem item, LayuiPage page) {
-
         Example example = new Example(BrandGnSmalltypeItem.class);
         example.setOrderByClause("create_date DESC");
 
